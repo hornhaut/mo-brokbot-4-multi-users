@@ -2,13 +2,17 @@ package at.fhtw.mobrokbot.pojos;
 
 import java.util.HashMap;
 
+/**
+ * DataSet initialsing and populating a puplic HashMap, can only be initialised once
+ */
 public class DataSet {
+    private static DataSet instance;
     /*
     HashMap containing i_poscount and Axes
      */
-    public static HashMap<Integer, Axes> dataMap = new HashMap<>();
+    public HashMap<Integer, Axes> dataMap = new HashMap<>();
 
-    public DataSet() {
+    private DataSet() {
         dataMap.put(0, new Axes(114.690105, 98.83218384, 86.5335083, -88.71868896));
         dataMap.put(1, new Axes(114.690105, 82.79907419, 81.36700034, -77.9744914));
         dataMap.put(2, new Axes(114.690105, 75.05328012, 52.96480029, -72.71319708));
@@ -26,5 +30,12 @@ public class DataSet {
         dataMap.put(14, new Axes(114.690105, -3.6640625, 6.116119385, -97.54159546));
         dataMap.put(15, new Axes(114.690105, -3.6640625, 6.116119385, -97.54159546));
 
+    }
+
+    public static DataSet getInstance(){
+        if (instance == null){
+            instance = new DataSet();
+        }
+        return instance;
     }
 }
