@@ -11,8 +11,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    private static String BASETOPIC = "MoBrokbot/";
-    private static String PUBLISHER_ID = "EngMaA2";
+    private static final String BASETOPIC = "MoBrokbot/";
+    private static final String PUBLISHER_ID = "EngMaA2";
 
     public static int i_poscount = 0;
 
