@@ -1,4 +1,4 @@
-package at.fhtw.mobrokbot.pojos;
+package mobrokbot.pojos;
 
 import java.util.HashMap;
 

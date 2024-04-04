@@ -1,8 +1,10 @@
-package at.fhtw.mobrokbot.pojos;
+package mobrokbot.pojos;
 
 import java.util.HashMap;
 import java.util.function.DoubleToLongFunction;
-
+/*
+test
+ */
 public class Axes {
 
     public Double rot_Z1;
