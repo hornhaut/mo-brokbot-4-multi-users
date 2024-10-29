@@ -2,6 +2,7 @@ package mobrokbot;
 
 import mobrokbot.pojos.Axes;
 import mobrokbot.pojos.DataSet;
+import mobrokbot.pojos.Errors;
 import org.eclipse.paho.client.mqttv3.*;
 
 import java.nio.charset.StandardCharsets;
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     private static final String BASETOPIC = "MoBrokbot/";
-    private static final String PUBLISHER_ID = "EngMaA2";
+    private static final String PUBLISHER_ID = "DigitalTwinA2";
 
     public static int i_poscount = 0;
 
@@ -37,22 +38,28 @@ public class Main {
             throw new RuntimeException(e);
             // proper error handling please
         }
+
+
         DataSet ds = DataSet.getInstance();
 
         Runnable newDataSet = () -> {
             //System.out.println("sending data at "+i_poscount);
-            Axes axes = ds.dataMap.get(i_poscount);
-            prepAndSendMsg("rot_Z1", axes.rot_Z1);
-            prepAndSendMsg("rot_Z2", axes.rot_Z2 + Math.random() * 2.52 - 1.26);// random error +-1.26
-            prepAndSendMsg("l4_Z_rot", axes.l4_Z_rot);
-            prepAndSendMsg("trans_ZA2", axes.trans_Z - 1.08); //systematic error -1.08
-            prepAndSendMsg("i_poscount", i_poscount);
+            Axes axes = ds.axesMap.get(i_poscount);
+            for (int i = 1; i<11;i++) {
+                Errors errors = ds.errorMap.get(i);
+                prepAndSendMsg("Gruppe"+i+"/rot_Z1", axes.rot_Z1 + errors.getRot_Z1());
+                prepAndSendMsg("Gruppe"+i+"/rot_Z2", axes.rot_Z2 + errors.getRot_Z2());//+ Math.random() * 2.52 - 1.26);// random error +-1.26
+                prepAndSendMsg("Gruppe"+i+"/l4_Z_rot", axes.l4_Z_rot + errors.getL4_Z_rot());
+                prepAndSendMsg("Gruppe"+i+"/trans_ZA2", axes.trans_Z + errors.getTrans_Z());// - 1.08); //systematic error -1.08
+                prepAndSendMsg("Gruppe"+i+"/i_poscount", i_poscount);
+            }
             if (i_poscount < 15) i_poscount++;
             else i_poscount = 0;
             sendTimeStamp();
         };
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(newDataSet, 0, 5, TimeUnit.SECONDS);
+        try (ScheduledExecutorService executor = Executors.newScheduledThreadPool(1)) {
+            executor.scheduleAtFixedRate(newDataSet, 0, 5, TimeUnit.SECONDS);
+        }
     }
 
     public void connectionLost(Throwable throwable) {
