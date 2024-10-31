@@ -57,9 +57,9 @@ public class Main {
             else i_poscount = 0;
             sendTimeStamp();
         };
-        try (ScheduledExecutorService executor = Executors.newScheduledThreadPool(1)) {
-            executor.scheduleAtFixedRate(newDataSet, 0, 5, TimeUnit.SECONDS);
-        }
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(newDataSet, 0, 5, TimeUnit.SECONDS);
+
     }
 
     public void connectionLost(Throwable throwable) {
