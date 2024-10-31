@@ -29,7 +29,8 @@ public class Main {
         options.setCleanSession(true);
         options.setConnectionTimeout(10);
         try {
-            publisher = new MqttClient("tcp://engine.ie.technikum-wien.at:1883", PUBLISHER_ID);
+            //publisher = new MqttClient("tcp://engine.ie.technikum-wien.at:1883", PUBLISHER_ID);
+            publisher = new MqttClient("tcp://mqtt.eclipseprojects.io:1883", PUBLISHER_ID);
 
             sendTimeStamp();
 
