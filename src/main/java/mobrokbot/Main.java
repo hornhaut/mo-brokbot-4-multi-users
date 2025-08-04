@@ -7,6 +7,7 @@ import org.eclipse.paho.client.mqttv3.*;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     private static final String BASETOPIC = "MoBrokbot/";
-    private static final String PUBLISHER_ID = "DigitalTwinA2";
+    private static final String PUBLISHER_ID = "DigitalTwinA2_"+ LocalDateTime.now();
 
     public static int i_poscount = 0;
 
@@ -30,7 +31,7 @@ public class Main {
         options.setConnectionTimeout(10);
         try {
             //publisher = new MqttClient("tcp://engine.ie.technikum-wien.at:1883", PUBLISHER_ID);
-            publisher = new MqttClient("tcp://mqtt.eclipseprojects.io:1883", PUBLISHER_ID);
+            publisher = new MqttClient("tcp://broker.emqx.io:1883", PUBLISHER_ID);
 
             sendTimeStamp();
 
@@ -46,8 +47,8 @@ public class Main {
         Runnable newDataSet = () -> {
             //System.out.println("sending data at "+i_poscount);
             Axes axes = ds.axesMap.get(i_poscount);
-            for (int i = 1; i<11;i++) {
-                Errors errors = ds.errorMap.get(i);
+            for (int i = 1; i<16;i++) {
+                Errors errors = ds.errorMap.get(i-1);
                 prepAndSendMsg("Gruppe"+i+"/rot_Z1", axes.rot_Z1 + errors.getRot_Z1());
                 prepAndSendMsg("Gruppe"+i+"/rot_Z2", axes.rot_Z2 + errors.getRot_Z2());//+ Math.random() * 2.52 - 1.26);// random error +-1.26
                 prepAndSendMsg("Gruppe"+i+"/l4_Z_rot", axes.l4_Z_rot + errors.getL4_Z_rot());
