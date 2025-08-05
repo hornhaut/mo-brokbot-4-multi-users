@@ -14,7 +14,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    private static final String BASETOPIC = "MoBrokbot/";
+    private static final String BASETOPIC = "MoBrokbot/DigitalTwinA2";
     private static final String PUBLISHER_ID = "DigitalTwinA2_"+ LocalDateTime.now();
 
     public static int i_poscount = 0;
@@ -100,7 +100,7 @@ public class Main {
         try {
             if (!publisher.isConnected()) publisher.connect(options);
             publisher.publish(topicPath, msg);
-            System.out.println("[Paho MQTTPublisher] sent "+ topic + ": " + new String(msg.getPayload(), StandardCharsets.UTF_8));
+            System.out.println("[Paho MQTTPublisher] sent "+ topicPath + ": " + new String(msg.getPayload(), StandardCharsets.UTF_8));
         } catch (MqttException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
